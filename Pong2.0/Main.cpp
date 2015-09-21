@@ -18,8 +18,13 @@ author: Esmeralda Salamone, esmes@aie.edu.au
 const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT = 800;
 const float PLAYER_SPEED = 1000;
+int Score[2];
+
 void main()
 {
+
+	Score[1] = 0;
+	Score[2] = 0;
 	bool Xflip = false;
 	bool Yflip = false;
 	//first we need to initialize our graphics context- or window.
@@ -95,15 +100,19 @@ void main()
 		}
 		if (ball_tempX > 1200)
 		{
-			ball_tempX = 1190;
+			ball_tempX = 600;
+			ball_tempY = 400;
 			Bxvel = -Bxvel;
 			Xflip = !Xflip;
+			Score[2] += 1;
 		}
 		if (ball_tempX < 0) 
 		{
-			ball_tempX = 10;
+			ball_tempX = 600;
+			ball_tempY = 400;
 			Bxvel = -Bxvel;
 			Xflip = !Xflip;
+			Score[1] += 1;
 		}
 		if (you.tempY < 0) you.tempY = 1;
 		if (you.tempY + PADDLE_HEIGHT > 800) you.tempY = 799 - PADDLE_HEIGHT;
@@ -129,10 +138,15 @@ void main()
 			Byacc = -speed;
 		}
 
+		// end game
+		if (Score[1] == 5 || Score[2] == 5)
+		{
+			sfw::termContext();
+		}
 
 		// more euler integration 
-		Bxvel += Bxacc * sfw::getDeltaTime() / 3;
-		Byvel += Byacc * sfw::getDeltaTime() / 3;
+		Bxvel += Bxacc * sfw::getDeltaTime();
+		Byvel += Byacc * sfw::getDeltaTime();
 		
 
 		Box::drawPlayer(you.tempX, you.tempY);
